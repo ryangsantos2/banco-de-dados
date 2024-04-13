@@ -133,3 +133,100 @@ CREATE TABLE gasto (
     delete from gasto where idGasto = 1;
     
 						-- ATIVIDADE 3
+
+create database PraticaFuncionario;
+use PraticaFuncionario;
+
+CREATE TABLE setor (
+  idSetor INT PRIMARY KEY AUTO_INCREMENT,
+  nome VARCHAR(45) ,
+  numAndar int
+  );
+
+
+insert into setor values
+(default,'RH',3),
+(default,'Consultoria', 4),
+(default,'Sala de reuniões', 5 ),
+(default,'Gerencia', 6 );
+
+
+CREATE TABLE funcionario (
+  idFuncionario INT PRIMARY KEY AUTO_INCREMENT,
+  fkSetor INT,
+  nome VARCHAR(45),
+  telCelular VARCHAR(11),
+  salario varchar(20),
+	constraint chkSalario
+    check (salario>0),
+	CONSTRAINT setor_funcionario 
+    FOREIGN KEY(fkSetor)
+    REFERENCES setor(idSetor)
+  );
+
+  INSERT INTO funcionario VALUES
+  (default,4 ,'Ryan', '11996738517', '45000'),
+  (default, 2,'Julia', '11945678901', '15000'),
+  (default, 1,'Vinicius', '11923456789', '8000'),
+  (default, 1,'Adriano', '11912345678', '8000'),
+  (default, 2,'Giovanna','11908276666', '15000');
+ 
+ create table acompanhante(
+ idAcompanhante int auto_increment,
+ fkFuncionario int,
+	constraint pkAcompanhante_Funcionario
+    primary key(idAcompanhante, fkFuncionario),
+nome varchar(45),
+tipo_relacao varchar(20),
+dtNasc date,
+	constraint acp_func
+    foreign key (fkFuncionario)
+    references funcionario(idFuncionario)
+ );
+ 
+ insert into acompanhante values
+ (default,1, 'Renata', 'Mae', '1988-06-07'),
+ (default,2, 'Wagner', 'Pai', '1988-06-07'),
+ (default,3, 'Marcia', 'Mae', '1988-06-07'),
+ (default,3, 'Isabelle', 'Esposa', '1988-06-07'),
+ (default,2, 'Gaby', 'Irmã', '1988-06-07'),
+ (default,4, 'Renata', 'Mae', '1988-06-07'),
+ (default, 5, 'Gisele', 'Mae', '1988-06-07');
+ 
+ -- Exibir todos os dados de cada tabela criada, separadamente.
+ select * from acompanhante;
+ select * from funcionario;
+ select * from setor;
+-- Exibir os dados dos setores e dos seus respectivos funcionários.
+select setor.nome as SETOR, funcionario.nome as FUNCIONARIO
+	from setor
+    join funcionario
+    on setor.idSetor = funcionario.fkSetor;
+-- Exibir os dados de um determinado setor (informar o nome do setor na consulta) e dos seus respectivos funcionários.
+select setor.nome as SETOR, funcionario.nome as FUNCIONARIO
+	from setor
+    join funcionario
+    on setor.idSetor = funcionario.fkSetor
+    where setor.nome = 'RH';
+-- Exibir os dados dos funcionários e de seus acompanhantes.
+select funcionario.nome as FUNCIONARIO, acompanhante.nome as ACOMPANTANTE
+	from funcionario
+    join acompanhante
+    on funcionario.idFuncionario = acompanhante.fkFuncionario;
+-- Exibir os dados de apenas um funcionário (informar o nome do funcionário) e os dados de seus acompanhantes.
+select funcionario.nome as FUNCIONARIO, acompanhante.nome as ACOMPANTANTE
+	from funcionario
+    join acompanhante
+    on funcionario.idFuncionario = acompanhante.fkFuncionario
+    where funcionario.nome = 'Julia';
+-- Exibir os dados dos funcionários, dos setores em que trabalham e dos seus acompanhantes.
+select *
+	from setor
+    join funcionario
+    on setor.idSetor = funcionario.fkSetor
+    join acompanhante
+    on funcionario.idFuncionario = acompanhante.fkFuncionario
+    ;
+ 
+													-- ATIVIDADE 4
+ 
