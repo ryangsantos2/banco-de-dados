@@ -229,4 +229,105 @@ select *
     ;
  
 													-- ATIVIDADE 4
- 
+                                                    
+                                                    
+
+create table treinador(
+idTreinador int primary key auto_increment,
+nome varchar(50),
+telCelular char(11),
+email varchar (50),
+fkExperiente int,
+	constraint novato_experiente
+    foreign key (fkExperiente)
+    references treinador(idTreinador)
+);
+
+alter table treinador auto_increment = 10;
+
+ -- Cada treinador treina mais de um nadador.
+-- Cada nadador tem apenas um treinador.
+-- Sobre cada nadador, o sistema guarda um identificador, que identifica de forma
+-- única cada um deles. Esse identificador começa com o valor 100 e é inserido de
+-- forma automática. Além desse identificador, o sistema guarda o nome, o estado de
+-- origem e a data de nascimento do nadador.
+
+create table nadador(
+idNadador int primary key auto_increment,
+fkTreinador int,
+	constraint treinador_nadador
+    foreign key (fkTreinador)
+    references treinador(idTreinador),
+nome varchar(50),
+local_nasc varchar(50),
+dtNasc date
+); 
+alter table nadador auto_increment = 100;
+
+
+
+
+--  Inserir dados nas tabelas, de forma que exista mais de um nadador para algum
+-- treinador, e mais de um treinador sendo orientado por algum treinador mais
+-- experiente
+insert into treinador values
+(default, 'Ryan', '11996738517', 'ryangsantos@gmail.com', null),
+(default, 'Julia', '11962635528', 'jucris@gmail.com', 10),
+(default, 'Vinicius', '11988876253', 'vinitostes@gmail.com', 10);
+
+insert into nadador values
+(default, 11,'Joao', 'Sao Paulo', '2000-09-08'),
+(default, 12,'Pedro','Espirito Santo' , '2000-12-01' ),
+(default, 11, 'Ana', 'Sao paulo', '2001-03-10'),
+(default, 10, 'Giovanna', 'Sao paulo', '1998-02-28'),
+(default, 12, 'Adriano', 'Brasilia', '1998-05-23');
+
+--  Exibir todos os dados de cada tabela criada, separadamente.
+select * from treinador;
+select * from nadador;
+
+-- Exibir os dados dos treinadores e os dados de seus respectivos nadadores.
+select treinador.nome as Treinador, nadador.nome as Nadador
+	from treinador
+    join nadador
+    on treinador.idTreinador=nadador.fkTreinador;
+--  Exibir os dados de um determinado treinador (informar o nome do treinador na
+-- consulta) e os dados de seus respectivos nadadores.
+select treinador.nome as Treinador, nadador.nome as Nadador
+	from treinador
+    join nadador
+    on treinador.idTreinador=nadador.fkTreinador
+    where treinador.nome = 'Julia';
+--  Exibir os dados dos treinadores e os dados dos respectivos treinadores
+-- orientadores.
+select treinador.nome as Novato, orientador.nome as Orientador
+	from treinador 
+    join treinador as orientador
+    on orientador.idTreinador=treinador.fkExperiente;
+-- Exibir os dados dos treinadores e os dados dos respectivos treinadores
+-- orientadores, porém somente de um determinado treinador orientador (informar o
+-- nome do treinador na consulta).
+select treinador.nome as Novato, orientador.nome as Orientador
+	from treinador 
+    join treinador as orientador
+    on orientador.idTreinador=treinador.fkExperiente 
+	where treinador.fkExperiente= 10;
+--  Exibir os dados dos treinadores, os dados dos respectivos nadadores e os dados
+-- dos respectivos treinadores orientadores.
+select treinador.nome as Novato, orientador.nome as Orientador, nadador.nome
+	from treinador 
+    left join treinador as orientador
+    on orientador.idTreinador=treinador.fkExperiente 
+	join nadador
+    on treinador.idTreinador = nadador.fkTreinador;
+--  Exibir os dados de um treinador (informar o seu nome na consulta), os dados dos
+-- respectivos nadadores e os dados do seu treinador orientador
+select treinador.nome as Novato, orientador.nome as Orientador, nadador.nome as Nadador
+	from treinador 
+   left join treinador as orientador
+    on orientador.idTreinador=treinador.fkExperiente 
+    join nadador
+    on treinador.idTreinador = nadador.fkTreinador
+    where treinador.nome = 'Julia'
+    
+								
