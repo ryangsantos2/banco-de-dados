@@ -77,7 +77,7 @@ drop table cliente;
 CREATE TABLE pessoa (
   idPessoa INT PRIMARY KEY AUTO_INCREMENT,
   nome VARCHAR(45) ,
-  dtNasc VARCHAR(45) ,
+  dtNasc date ,
   profissao VARCHAR(45)
   );
 
